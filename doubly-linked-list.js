@@ -1,8 +1,8 @@
 (function (exports) {
   "use strict";
-/*
- * Constructor. Takes no arguments.
-*/
+  /*
+   * Constructor. Takes no arguments.
+   */
 
   function DoublyLinkedList() {
     // pointer to first item
@@ -23,9 +23,9 @@
     return node;
   };
 
-/*
- * Appends a node to the end of the list.
-*/
+  /*
+   * Appends a node to the end of the list.
+   */
   DoublyLinkedList.prototype.append = function (data) {
     var node = this._createNewNode(data);
 
@@ -48,13 +48,13 @@
     return node;
   };
 
-/*
- * Prepends a node to the end of the list.
-*/
+  /*
+   * Prepends a node to the end of the list.
+   */
   DoublyLinkedList.prototype.prepend = function (data) {
     var node = this._createNewNode(data);
 
-    if (this.first === null) {
+    if (this._length === 0) {
 
       // we are empty, so this is the first node
       // use the same logic as append
@@ -74,10 +74,10 @@
     return node;
   };
 
-/*
- * Returns the node at the specified index. The index starts at 0.
-*/
-  DoublyLinkedList.prototype.item = function (index) {
+  /*
+   * Returns the node at the specified index. The index starts at 0.
+   */
+  var getByIndex = function (index) {
     if (index >= 0 && index < this._length) {
       var node = this._head;
       while (index--) {
@@ -87,32 +87,74 @@
     }
   };
 
-/*
- * Returns the node at the head of the list.
-*/
+  DoublyLinkedList.prototype.item = getByIndex;
+  DoublyLinkedList.prototype.get = getByIndex;
+
+  /*
+   * Returns the node at the head of the list.
+   */
   DoublyLinkedList.prototype.head = function () {
     return this._head;
   };
 
-/*
- * Returns the node at the tail of the list.
-*/
+  /*
+   * Returns the node at the tail of the list.
+   */
   DoublyLinkedList.prototype.tail = function () {
     return this._tail;
   };
 
-/*
- * Returns the size of the list.
-*/
+  /*
+   * Returns the size of the list.
+   */
   DoublyLinkedList.prototype.size = function () {
     return this._length;
   };
 
-/*
- * Removes the item at the index.
-*/
+  /*
+   * Removes the item at the index.
+   */
   DoublyLinkedList.prototype.remove = function (index) {
-    throw "Not implemented";
+    if (index > -1 && index < this._length) { // prevent out-of-bounds values
+
+      var current = this._head,
+        i = 0;
+
+      //special case: removing first item
+      if (index === 0) {
+        this._head = current.next;
+
+        if (!this._head) {
+          this._tail = null;
+        } else {
+          this._head.prev = null;
+        }
+
+        //special case: removing last item
+      } else if (index === this._length - 1) {
+        current = this._tail;
+        this._tail = current.prev;
+        this._tail.next = null;
+      } else {
+
+        //find the right location
+        while (i++ < index) {
+          current = current.next;
+        }
+
+        //skip over the item to remove
+        current.prev.next = current.next;
+      }
+
+      //decrement the length
+      this._length--;
+
+      //return the value
+      return current.data;
+
+    } else {
+      return null;
+    }
   };
 
   exports.DoublyLinkedList = DoublyLinkedList;
