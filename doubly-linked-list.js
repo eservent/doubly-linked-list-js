@@ -157,5 +157,20 @@
     }
   };
 
+
+  DoublyLinkedList.prototype.toArray = function(){
+    var result = [],
+      current = this._head;
+
+    while(current){
+      result.push(current.data);
+      current = current.next;
+    }
+
+    return result;
+  };
+
+  DoublyLinkedList.prototype.toString = function(){ return this.toArray().toString(); };
+
   exports.DoublyLinkedList = DoublyLinkedList;
 })(typeof exports === 'undefined' ? this['DLL'] = {} : exports);
